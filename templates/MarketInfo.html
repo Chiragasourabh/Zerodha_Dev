@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="/css/style.css" type="text/css" />
+</head>
+<body>
+    <div class="Container">
+        <div class="topnav">
+            <span>{{ date }}</span>
+            <div class="search-container">
+                <form method="post" action="MarketInfo">
+                <input type="text" placeholder="SL Name ..." name="length">
+                <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+
+        <div>
+            <table id="customers">
+                <tr>
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>Open</th>
+                    <th>High</th>
+                    <th>Low</th>
+                    <th>Close</th>
+                </tr>
+                {% for item in data %}
+                <tr>
+                    <td>{{ item['code'] }}</td>
+                    <td>{{ item['name'] }}</td>
+                    <td>{{ item['open'] }}</td>
+                    <td>{{ item['high'] }}</td>
+                    <td>{{ item['low'] }}</td>
+                    <td>{{ item['close'] }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</body>
+</html>
