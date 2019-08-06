@@ -25,14 +25,14 @@
                     <th>Low</th>
                     <th>Close</th>
                 </tr>
-                {% for item in data %}
+                {% for c, item in zip(code,data) %}
                 <tr>
-                    <td>{{ item['code'] }}</td>
-                    <td>{{ item['name'] }}</td>
-                    <td>{{ item['open'] }}</td>
-                    <td>{{ item['high'] }}</td>
-                    <td>{{ item['low'] }}</td>
-                    <td>{{ item['close'] }}</td>
+                    <td>{{ c.decode() }}</td>
+                    <td>{{ item[0].decode() }}</td>
+                    <td>{{ item[1].decode() }}</td>
+                    <td>{{ item[2].decode() }}</td>
+                    <td>{{ item[3].decode() }}</td>
+                    <td>{{ item[4].decode() }}</td>
                 </tr>
                 {% endfor %}
             </table>
