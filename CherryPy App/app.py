@@ -8,13 +8,17 @@ import redis
 
 env = Environment(loader=FileSystemLoader('templates'))
 env.globals.update(zip=zip)
-redisConn = redis.StrictRedis(host="127.0.0.1",port=6379,db=0)
+redisConn = redis.from_url(os.environ.get("REDIS_URL",'redis:'))
 
 class Root:
 
     @cherrypy.expose
     def index(self):
-        return """<a href="MarketInfo"><h1>Go to MarketInfo!</h1></a>"""
+        tmpl = env.get_template('index.html')
+        today = datetime.date.today().strftime("%d-%m-%Y")
+        bhavday = redisConn.mget("date")[0].decode()
+        return tmpl.render(today =  today, bhavday = bhavday)
+        # return """<a href="MarketInfo"><h1>Go to MarketInfo!</h1></a>"""
 
     @cherrypy.expose
     def MarketInfo(self, scname = None):
@@ -22,6 +26,7 @@ class Root:
         today = datetime.date.today().strftime("%d-%m-%Y")
         answerList = []
         scCodes = []
+        bhavday = redisConn.mget("date")[0].decode()
         if scname:
             matchingNames = redisConn.scan_iter("*"+scname.upper()+"*")
             for name in matchingNames:
@@ -33,7 +38,7 @@ class Root:
             for code in scCodes:
                 answerList.append(redisConn.hmget(code.decode(), "SC_NAME", "OPEN", "HIGH", "LOW", "CLOSE"))
             
-        return tmpl.render(date =  today, code = scCodes, data = answerList)
+        return tmpl.render(today =  today, bhavday = bhavday, code = scCodes, data = answerList)
 
 conf=   {
         "/css": {
@@ -42,4 +47,6 @@ conf=   {
                 }
         }
 
+cherrypy.config.update({'server.socket_host': '0.0.0.0',})
+cherrypy.config.update({'server.socket_port': int(os.environ.get('PORT', '5000')),})
 cherrypy.quickstart(Root(),config=conf)

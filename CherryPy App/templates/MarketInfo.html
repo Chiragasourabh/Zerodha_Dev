@@ -1,22 +1,19 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <link rel="stylesheet" href="/css/style.css" type="text/css" />
-</head>
-<body>
+{% extends '/layout.html' %}
+
+{% block body %}
     <div class="Container">
-        <div class="topnav">
-            <span>{{ date }}</span>
+        <div class="top">
+            <span>Todays Date: {{ today }}</span>
+            <span>BhavCopy Date: {{ bhavday }}</span>
             <div class="search-container">
                 <form method="post" action="MarketInfo">
-                <input type="text" placeholder="SL Name ..." name="scname">
-                <button type="submit">Search</button>
+                    <input type="text" placeholder="SL Name ..." name="scname">
+                    <button type="submit">Search</button>
                 </form>
             </div>
         </div>
-
         <div>
-            <table id="customers">
+            <table id="marketInfo">
                 <tr>
                     <th>Code</th>
                     <th>Name</th>
@@ -38,5 +35,4 @@
             </table>
         </div>
     </div>
-</body>
-</html>
+{% endblock %}
